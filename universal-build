@@ -1,0 +1,112 @@
+#!/usr/bin/env sh
+# Universal build entrypoint for template repos.
+# Benefits:
+# - Single command (`./universal-build`) for all stacks; only prerequisite is Nix.
+# - Toolchains come from Nix; language-native build tools stay idiomatic (e.g., Gradle, Poetry, pnpm).
+# - Deterministic: flake/lock pin tool versions; wrappers/lockfiles pin language deps; same env on macOS/Linux.
+# - CI/dev parity: runs the same `nix develop` environment everywhere, then dispatches to the repo’s build command.
+# - Minimal friction: guides on missing Nix/flake support, resolves the repo path so it works from any cwd, requires explicit idiomatic task args (passes them through), and supports a flake update flag.
+
+set -eu
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+NIX_FLAGS="--extra-experimental-features nix-command --extra-experimental-features flakes"
+SCRIPT_NAME="${0##*/}"
+
+fail() {
+  if [ "$#" -gt 0 ]; then
+    printf "%s\n" "$@" >&2
+  fi
+  printf '\033[31mBUILD FAILED\033[0m\n' >&2
+  exit 1
+}
+
+generate_usage_string() {
+  printf "Usage:\n"
+  printf "  %s --update-nix-flake                  # update nix flake lockfile\n" "$SCRIPT_NAME"
+  printf "  %s --print-node-and-pnpm-paths-for-ide # Print the Node and pnpm paths to supply to your IDE\n" "$SCRIPT_NAME"
+  printf "  %s <idiomatic-build-args>              # run idiomatic build tasks inside the nix dev shell\n" "$SCRIPT_NAME"
+}
+
+require_nix() {
+  if ! command -v nix >/dev/null 2>&1; then
+    fail "Error: Nix is required. Install from https://nix.dev/install-nix"
+  fi
+}
+
+detect_improper_usage() {
+  if [ "$#" -eq 0 ]; then
+    fail "$(generate_usage_string)"
+  fi
+}
+
+guard_single_arg_flags() {
+  # Ensure single-argument flags are either absent or the only argument, regardless of position.
+  found_flag=""
+  for arg in "$@"; do
+    case "$arg" in
+      --update-nix-flake|--print-node-and-pnpm-paths-for-ide)
+        if [ -n "$found_flag" ]; then
+          fail "Error: $arg cannot be combined with other single-argument flags."
+        fi
+        found_flag="$arg"
+        ;;
+    esac
+  done
+  if [ -n "$found_flag" ] && [ "$#" -ne 1 ]; then
+    fail "Error: $found_flag must be the only argument, if it is used."
+  fi
+}
+
+update_nix_flake() {
+  echo "Updating nix flake lock in ${SCRIPT_DIR}"
+  nix ${NIX_FLAGS} flake update "${SCRIPT_DIR}"
+}
+
+print_node_and_pnpm_paths_for_ide() {
+  node_path="$(nix ${NIX_FLAGS} develop "${SCRIPT_DIR}" --command sh -c 'command -v node')"
+  if [ -z "$node_path" ]; then
+    fail "Node is not available inside the nix develop environment; ensure your flake exposes nodejs."
+  fi
+  pnpm_path="$(nix ${NIX_FLAGS} develop "${SCRIPT_DIR}" --command sh -c 'command -v pnpm')"
+  if [ -z "$pnpm_path" ]; then
+    fail "pnpm is not available inside the nix develop environment; ensure your flake exposes pnpm."
+  fi
+  printf "Node binary path to supply to IDE: %s\n" "$node_path"
+  printf "pnpm binary path to supply to IDE: %s\n" "$pnpm_path"
+}
+
+print_build_start_log() {
+  printf "Starting Node pnpm build with: pnpm"
+  for arg in "$@"; do
+    printf " %s" "$arg"
+  done
+  printf "\n"
+}
+
+pnpm_handoff() {
+  exec nix ${NIX_FLAGS} develop "${SCRIPT_DIR}" --command sh -c 'cd "$1" && shift && pnpm "$@"' _ "${SCRIPT_DIR}" "$@"
+}
+
+main() {
+  require_nix
+
+  detect_improper_usage "$@"
+
+  guard_single_arg_flags "$@"
+
+  case "$1" in
+    --update-nix-flake)
+      update_nix_flake
+      ;;
+    --print-node-and-pnpm-paths-for-ide)
+      print_node_and_pnpm_paths_for_ide
+      ;;
+    *)
+      print_build_start_log "$@"
+      pnpm_handoff "$@"
+      ;;
+  esac
+}
+
+main "$@"
