@@ -1,7 +1,7 @@
 {
   description = "Dev shell for template-pure-javascript";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
   outputs = { self, nixpkgs }:
     let
@@ -12,15 +12,17 @@
       devShells = forEachSystem (system:
         let
           pkgs = import nixpkgs { inherit system; };
+
+          chosenNode = pkgs.nodejs_24;
+          customPnpm = pkgs.pnpm.override { nodejs = chosenNode; };
         in
         {
           default = pkgs.mkShell {
             packages = [
-              pkgs.nodejs_22
-              pkgs.pnpm
+              chosenNode
+              customPnpm
             ];
           };
         });
     };
 }
-

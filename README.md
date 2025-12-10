@@ -41,15 +41,27 @@ JavaScript best practices.
 * To update a dependency:
   * `devDependencies`: `./universal-build add -D <package-name>@<version>`
   * `dependencies`: `./universal-build add <package-name>@<version>`
+* To update all dependencies to latest compatible versions:
+  * `./universal-build update --latest`
 
 ### Adding A Toolchain Dependency
 1) Search https://search.nixos.org/packages for the package name
 2) Add the appropriate package to the package list in the `flake.nix` file
+3) If the dependency is in a different channel than the current `nixpkgs` version, run the workflow for "Updating Nix `nixpkgs` Version"
 
 ### Updating Nix `nixpkgs` Version
 1) Modify the version of `inputs.nixpkgs.url` in the `flake.nix` file to the desired version, according to https://status.nixos.org
 2) Run `./universal-build --update-nix-flake` to update the `flake.lock` lockfile
 3) Commit both files to version control
+
+### Updating Node Version
+* Follow the steps in the workflow "Adding A Toolchain Dependency", using `Node` as the package name
+* Update references to the node version in `package.json`
+* The `tsconfig.json` may need to be updated as well
+
+### Updating PNPM Version
+* Do not update PNPM with the usual notice banner and update command
+* Follow the steps in the workflow "Adding A Toolchain Dependency", using `pnpm` as the package name
 
 &nbsp;
 
