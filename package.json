@@ -13,7 +13,8 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "jest",
     "osImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/os-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
-    "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'"
+    "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
+    "executeOSImageSmokeTest": "pnpm run build && podman run --rm $npm_package_name:latest"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
