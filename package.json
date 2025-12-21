@@ -7,14 +7,17 @@
     "pnpm": ">=10 <11"
   },
   "scripts": {
-    "clean": "rm -rf node_modules dist && printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
-    "build": "pnpm install --frozen-lockfile && pnpm run check && tsc && pnpm run test && printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
+    "clean": "rm -rf node_modules dist && pnpm run printSuccess",
+    "build": "pnpm install --frozen-lockfile && pnpm run check && tsc && pnpm run test && pnpm run osImageBuild && pnpm run printSuccess",
     "check": "pnpm run lint",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "test": "jest"
+    "test": "jest",
+    "osImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/os-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
+    "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "eslint": "^9.39.1",

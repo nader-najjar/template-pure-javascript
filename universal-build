@@ -23,7 +23,7 @@ fail() {
 
 generate_usage_string() {
   printf "Usage:\n"
-  printf "  %s --update-nix-flake                  # update nix flake lockfile\n" "$SCRIPT_NAME"
+  printf "  %s --update-nix-flake-lockfile         # update nix flake lockfile\n" "$SCRIPT_NAME"
   printf "  %s --print-node-and-pnpm-paths-for-ide # Print the Node and pnpm paths to supply to your IDE\n" "$SCRIPT_NAME"
   printf "  %s <idiomatic-build-args>              # run idiomatic build tasks inside the nix dev shell\n" "$SCRIPT_NAME"
 }
@@ -45,7 +45,7 @@ guard_single_arg_flags() {
   found_flag=""
   for arg in "$@"; do
     case "$arg" in
-      --update-nix-flake|--print-node-and-pnpm-paths-for-ide)
+      --update-nix-flake-lockfile|--print-node-and-pnpm-paths-for-ide)
         if [ -n "$found_flag" ]; then
           fail "Error: $arg cannot be combined with other single-argument flags."
         fi
@@ -58,8 +58,8 @@ guard_single_arg_flags() {
   fi
 }
 
-update_nix_flake() {
-  echo "Updating nix flake lock in ${SCRIPT_DIR}"
+update_nix_flake_lockfile() {
+  echo "Updating nix flake lockfile in ${SCRIPT_DIR}"
   nix ${NIX_FLAGS} flake update "${SCRIPT_DIR}"
 }
 
@@ -96,8 +96,8 @@ main() {
   guard_single_arg_flags "$@"
 
   case "$1" in
-    --update-nix-flake)
-      update_nix_flake
+    --update-nix-flake-lockfile)
+      update_nix_flake_lockfile
       ;;
     --print-node-and-pnpm-paths-for-ide)
       print_node_and_pnpm_paths_for_ide
