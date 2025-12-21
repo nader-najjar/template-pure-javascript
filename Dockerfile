@@ -58,8 +58,8 @@ RUN mkdir -p ${SOFTWARE_DIRECTORY}/runtime-workspace && \
 #         - Starts the source code entrypoint
 #
 
-COPY dist ${SOFTWARE_DIRECTORY}/runtime-workspace/application
-COPY node_modules ${SOFTWARE_DIRECTORY}/runtime-workspace/application/node_modules
+COPY dist/application/ ${SOFTWARE_DIRECTORY}/runtime-workspace/application/
+COPY node_modules/ ${SOFTWARE_DIRECTORY}/runtime-workspace/application/node_modules/
 
 RUN printf '%s\n' \
   '#!/usr/bin/env bash' \
@@ -67,7 +67,7 @@ RUN printf '%s\n' \
   'set -a' \
   ". ${SOFTWARE_DIRECTORY}/runtime-workspace/nix-env.sh" \
   'set +a' \
-  "exec node ${SOFTWARE_DIRECTORY}/runtime-workspace/application/index.js \"\$@\"" \
+  "exec node ${SOFTWARE_DIRECTORY}/runtime-workspace/application/Main.js \"\$@\"" \
   > ${SOFTWARE_DIRECTORY}/runtime-workspace/run-application && \
   chmod +x ${SOFTWARE_DIRECTORY}/runtime-workspace/run-application
 

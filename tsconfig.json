@@ -5,7 +5,8 @@
     "types": [ "node" ],
     "module": "commonjs",
 
-    "outDir": "dist",
+    "rootDir": "src/main",
+    "outDir": "dist/application",
 
     "sourceMap": true,
     "esModuleInterop": true,
@@ -23,6 +24,5 @@
     "noUncheckedIndexedAccess": true,
     "strictPropertyInitialization": true
   },
-  "include": [ "src/**/*" ],
-  "exclude": [ "**/*.spec.ts", "**/*.test.ts" ]
+  "include": [ "src/main/**/*" ]
 }
