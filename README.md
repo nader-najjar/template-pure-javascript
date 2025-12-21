@@ -24,6 +24,10 @@ JavaScript best practices.
 * Installs dependencies according to the pnpm lockfile
 * Runs ESLint
 * Compiles TypeScript code into JavaScript
+* Runs unit tests
+
+### `./universal-build clean`
+* Removes temporary build outputs
 
 &nbsp;
 

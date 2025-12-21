@@ -3,7 +3,7 @@ const tsParser = require('@typescript-eslint/parser');
 
 module.exports = [
   {
-    ignores: ['dist/**', 'node_modules/**'],
+    ignores: ['dist/**', 'node_modules/**']
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -12,15 +12,15 @@ module.exports = [
       parserOptions: {
         project: './tsconfig.json',
         sourceType: 'module',
-        ecmaVersion: 'latest',
-      },
+        ecmaVersion: 'latest'
+      }
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
+      '@typescript-eslint': tsPlugin
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
       'max-len': ['error', { code: 120, tabWidth: 2 }]
-    },
-  },
+    }
+  }
 ];

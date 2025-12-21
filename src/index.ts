@@ -1,1 +1,5 @@
-console.log('Happy developing ✨')
+function hi() {
+  return;
+}
+
+hi()

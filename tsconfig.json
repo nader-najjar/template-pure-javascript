@@ -1,12 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ES2022",
+    "lib": [ "es2022" ],
     "module": "commonjs",
+
+    "outDir": "dist",
+
+    "sourceMap": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
     "skipLibCheck": true,
-    "outDir": "dist"
+    "forceConsistentCasingInFileNames": true,
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "strictPropertyInitialization": true
   },
-  "include": ["src"]
+  "include": [ "src/**/*" ],
+  "exclude": [ "**/*.spec.ts", "**/*.test.ts" ]
 }
