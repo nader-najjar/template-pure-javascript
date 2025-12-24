@@ -25,8 +25,8 @@ JavaScript best practices.
 * Runs ESLint
 * Compiles TypeScript code into JavaScript
 * Runs unit tests
-* Builds an OS image with Podman, set to run the code entrypoint (tagged `<project-name>:latest`)
-* Saves the image as `build/os-image.tar`
+* Builds a container image with Podman, set to run the code entrypoint (tagged `<project-name>:latest`)
+* Saves the image as `build/container-image.tar`
 
 ### `./universal-build clean`
 * Removes temporary build outputs

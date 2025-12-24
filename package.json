@@ -8,13 +8,13 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules dist && pnpm run printSuccess",
-    "build": "pnpm install --frozen-lockfile && pnpm run check && tsc && pnpm run test && pnpm run osImageBuild && pnpm run printSuccess",
+    "build": "pnpm install --frozen-lockfile && pnpm run check && tsc && pnpm run test && pnpm run containerImageBuild && pnpm run printSuccess",
     "check": "pnpm run lint",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "jest",
-    "osImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/os-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
+    "containerImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/container-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
     "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
-    "executeOSImageSmokeTest": "pnpm run build && podman run --rm $npm_package_name:latest"
+    "executeContainerImageSmokeTest": "pnpm run build && podman run --rm $npm_package_name:latest"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
