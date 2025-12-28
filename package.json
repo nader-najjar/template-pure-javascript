@@ -10,7 +10,7 @@
     "clean": "rm -rf node_modules dist && pnpm run printSuccess",
     "build": "pnpm install --frozen-lockfile && pnpm run check && tsc && pnpm run test && pnpm run containerImageBuild && pnpm run printSuccess",
     "check": "pnpm run lint",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint",
     "test": "jest",
     "containerImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/container-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
     "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
@@ -25,5 +25,10 @@
     "jest": "^30.2.0",
     "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "inversify": "^7.10.8",
+    "pino": "^10.1.0",
+    "reflect-metadata": "^0.2.2"
   }
 }

@@ -24,9 +24,9 @@ JavaScript best practices.
 * Installs dependencies according to the pnpm lockfile
 * Runs ESLint
 * Compiles TypeScript code into JavaScript
-* Runs unit tests
+* Runs unit tests with code coverage thresholds enforced
 * Builds a container image with Podman, set to run the code entrypoint (tagged `<project-name>:latest`)
-* Saves the image as `build/container-image.tar`
+* Saves the image as `dist/container-image.tar`
 
 ### `./universal-build clean`
 * Removes temporary build outputs
@@ -78,7 +78,12 @@ JavaScript best practices.
 2) Go to `Settings -> Languages & Frameworks -> Node.js`, then select the Node and the pnpm paths from step 1 (make sure to do both)
 
 ### Visual Studio Code
-1) ???
+1) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake.
+2) Open the workspace settings JSON (`cmd+shift+p -> Open Workspace Settings (JSON)`).
+3) Configure the `node` and `pnpm` paths for this workspace, for example:
+   * `"nodejs-runtime.executablePath": "<node-path-from-step-1>"`
+   * `"npm.packageManager": "pnpm"`
+   * `"pnpm.path": "<pnpm-path-from-step-1>"`
 
 &nbsp;
 
