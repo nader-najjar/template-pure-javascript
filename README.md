@@ -73,10 +73,13 @@ JavaScript best practices.
 
 ## 5. IDE Setup
 
-### WebStorm
-1) Open the WebStorm startup window, click `Open`, and select this cloned repository
-2) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
-3) Go to `Settings -> Languages & Frameworks -> Node.js`, then select the Node and the pnpm paths from step 1 (make sure to do both)
+### IntelliJ IDEA Ultimate
+1) Open the IntelliJ welcome splash screen, and make sure the `Multi-Project Workspace` plugin is installed (https://plugins.jetbrains.com/plugin/24765-multi-project-workspace)
+2) Click `New Project` and select type `Workspace`
+3) Add this cloned repository as a project under `Workspace Projects -> Add Projects`
+4) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
+5) Go to `Settings -> Languages & Frameworks -> JavaScript Runtime`, then select both the Node and the pnpm paths from step 1 (make sure to do both)
+6) Correctly configure the project structure under File -> Project Structure -> Modules (mark sources, tests, etc.)
 
 ### Visual Studio Code
 1) Open an empty Visual Studio Code startup window (important!!)
