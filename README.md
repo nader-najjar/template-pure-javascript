@@ -74,13 +74,16 @@ JavaScript best practices.
 ## 5. IDE Setup
 
 ### WebStorm
-1) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake.
-2) Go to `Settings -> Languages & Frameworks -> Node.js`, then select the Node and the pnpm paths from step 1 (make sure to do both)
+1) Open the WebStorm startup window, click `Open`, and select this cloned repository
+2) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
+3) Go to `Settings -> Languages & Frameworks -> Node.js`, then select the Node and the pnpm paths from step 1 (make sure to do both)
 
 ### Visual Studio Code
-1) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake.
-2) Open the workspace settings JSON (`cmd+shift+p -> Open Workspace Settings (JSON)`).
-3) Configure the `node` and `pnpm` paths for this workspace, for example:
+1) Open an empty Visual Studio Code startup window (important!!)
+2) Click `File -> Add Folder to Workspace` and select this cloned repository
+3) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
+4) Go to folder settings JSON (`cmd+shift+p -> Preferences: Open Folder Settings (JSON)`), select the folder root that was added in step 2, and add the following. By placing this in your folder settings rather than the user/workspace settings, it will ensure you can properly configure this per-repository
+5) Configure the `node` and `pnpm` paths for this workspace:
    * `"nodejs-runtime.executablePath": "<node-path-from-step-1>"`
    * `"npm.packageManager": "pnpm"`
    * `"pnpm.path": "<pnpm-path-from-step-1>"`
