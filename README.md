@@ -75,21 +75,20 @@ JavaScript best practices.
 
 ### IntelliJ IDEA Ultimate
 1) Open the IntelliJ welcome splash screen, and make sure the `Multi-Project Workspace` plugin is installed (https://plugins.jetbrains.com/plugin/24765-multi-project-workspace)
-2) Click `New Project` and select type `Workspace`
-3) Add this cloned repository as a project under `Workspace Projects -> Add Projects`
-4) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
-5) Go to `Settings -> Languages & Frameworks -> JavaScript Runtime`, then select both the Node and the pnpm paths from step 1 (make sure to do both)
+2) Click `New Project` and select type `Workspace`, don't add any projects yet, and click `Create`
+3) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
+4) Go to `Settings -> Languages & Frameworks -> JavaScript Runtime`, then select both the Node and the pnpm paths from step 3 (make sure to do both)
+5) Right click the workspace in the project view and click `Add Projects to Workspace` and select this cloned repository folder
 6) Correctly configure the project structure under File -> Project Structure -> Modules (mark sources, tests, etc.)
 
 ### Visual Studio Code
 1) Open an empty Visual Studio Code startup window (important!!)
-2) Click `File -> Add Folder to Workspace` and select this cloned repository
-3) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
-4) Go to folder settings JSON (`cmd+shift+p -> Preferences: Open Folder Settings (JSON)`), select the folder root that was added in step 2, and add the following. By placing this in your folder settings rather than the user/workspace settings, it will ensure you can properly configure this per-repository
-5) Configure the `node` and `pnpm` paths for this workspace:
-   * `"nodejs-runtime.executablePath": "<node-path-from-step-1>"`
+2) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
+3) Go to folder settings JSON (`cmd+shift+p -> Preferences: Open Folder Settings (JSON)`), and configure the `node` and `pnpm` paths by adding the following. By placing this in your folder settings rather than the user/workspace settings, it will ensure you can properly configure this per-repository:
+   * `"nodejs-runtime.executablePath": "<node-path-from-step-2>"`
    * `"npm.packageManager": "pnpm"`
-   * `"pnpm.path": "<pnpm-path-from-step-1>"`
+   * `"pnpm.path": "<pnpm-path-from-step-2>"`
+4) Click `File -> Add Folder to Workspace` and select this cloned repository
 
 &nbsp;
 
