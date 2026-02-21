@@ -6,21 +6,24 @@ JavaScript best practices.
 
 ## 1. Local Development Machine Prerequisites
 
-* Install Nix as per https://nix.dev/install-nix
-    * Nix handles all other requirements so that developer machine setup is as minimal as possible
+* Install Nix as per <https://nix.dev/install-nix>
+  * Nix handles all other requirements so that developer machine setup is as minimal as possible
     * Further, it does not matter what version of Nix you have - it guarantees reproducibility
+  * If, after an Apple update, nix is not found on PATH, follow <https://github.com/NixOS/nix/issues/7880> and add the snippet to `~/.zshrc` instead
 
 &nbsp;
 
 ## 2. Tips
 
 * Run `echo "alias ub='./universal-build'" >> ~/.zshrc` then `source ~/.zshrc` to make `ub` a quick alias for `./universal-build`
+* Add the Nix snippet to your `~/.zshrc` so it is never wiped by system updates (snippet: <https://github.com/NixOS/nix/issues/7880>)
 
 &nbsp;
 
 ## 3. Build Tasks
 
 ### `./universal-build build`
+
 * Installs dependencies according to the pnpm lockfile
 * Runs ESLint
 * Compiles TypeScript code into JavaScript
@@ -29,6 +32,7 @@ JavaScript best practices.
 * Saves the image as `dist/container-image.tar`
 
 ### `./universal-build clean`
+
 * Removes temporary build outputs
 
 &nbsp;
@@ -36,6 +40,7 @@ JavaScript best practices.
 ## 4. Workflows
 
 ### Handling NPM Dependencies
+
 * NPM dependencies should never be manually edited. Always use one of these flows to add/remove/update
   * If manual edits cause drift with the lockfile, run `./universal-build install` to regenerate the lockfile (again, this command should never have to be executed - use the below instead)
 * To add a dependency:
@@ -51,21 +56,25 @@ JavaScript best practices.
   * `./universal-build update --latest`
 
 ### Adding A Toolchain Dependency
-1) Search https://search.nixos.org/packages for the package name
+
+1) Search <https://search.nixos.org/packages> for the package name
 2) Add the appropriate package to the package list in the `flake.nix` file
 3) If the dependency is in a different channel than the current `nixpkgs` version, run the workflow for "Updating Nix `nixpkgs` Version"
 
 ### Updating Nix `nixpkgs` Version
-1) Modify the version of `inputs.nixpkgs.url` in the `flake.nix` file to the desired version, according to https://status.nixos.org
+
+1) Modify the version of `inputs.nixpkgs.url` in the `flake.nix` file to the desired version, according to <https://status.nixos.org>
 2) Run `./universal-build --update-nix-flake-lockfile` to update the `flake.lock` lockfile
 3) Commit both files to version control
 
 ### Updating Node Version
+
 * Follow the steps in the workflow "Adding A Toolchain Dependency", using `Node` as the package name
 * Update references to the node version in `package.json`
 * The `tsconfig.json` may need to be updated as well
 
 ### Updating PNPM Version
+
 * Do not update PNPM with the usual notice banner and update command
 * Follow the steps in the workflow "Adding A Toolchain Dependency", using `pnpm` as the package name
 
@@ -74,27 +83,21 @@ JavaScript best practices.
 ## 5. IDE Setup
 
 ### IntelliJ IDEA Ultimate
-1) Open the IntelliJ welcome splash screen, and make sure the `Multi-Project Workspace` plugin is installed (https://plugins.jetbrains.com/plugin/24765-multi-project-workspace)
-2) Click `New Project` and select type `Workspace`, don't add any projects yet, and click `Create`
-3) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
-4) Go to `Settings -> Languages & Frameworks -> JavaScript Runtime`, then select both the Node and the pnpm paths from step 3 (make sure to do both)
-5) Right click the workspace in the project view and click `Add Projects to Workspace` and select this cloned repository folder
-6) Correctly configure the project structure under File -> Project Structure -> Modules (mark sources, tests, etc.)
+
+Follow the instructions here: <https://nader-najjar.notion.site/JetBrains-IDE-Setup-Usage-Guide-d9b0a2b78755822f9d03819f5f02feb2?source=copy_link>
+    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the java version specified in the flake
 
 ### Visual Studio Code
-1) Open an empty Visual Studio Code startup window (important!!)
-2) Run `./universal-build --print-node-and-pnpm-paths-for-ide` to get the local nix installation of the Node version and pnpm version specified in the flake
-3) Go to folder settings JSON (`cmd+shift+p -> Preferences: Open Folder Settings (JSON)`), and configure the `node` and `pnpm` paths by adding the following. By placing this in your folder settings rather than the user/workspace settings, it will ensure you can properly configure this per-repository:
-   * `"nodejs-runtime.executablePath": "<node-path-from-step-2>"`
-   * `"npm.packageManager": "pnpm"`
-   * `"pnpm.path": "<pnpm-path-from-step-2>"`
-4) Click `File -> Add Folder to Workspace` and select this cloned repository
+
+Follow the instructions here: <https://nader-najjar.notion.site/Visual-Studio-Code-Setup-Usage-Guide-f4e0a2b7875583be9293817d26459034?source=copy_link>
+    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the java version specified in the flake
 
 &nbsp;
 
 ## 6. References
 
 ### Nix
-* Installation: https://nix.dev/install-nix
-* Nix Versions: https://status.nixos.org
-* Nix Package Search: https://search.nixos.org/packages
+
+* Installation: <https://nix.dev/install-nix>
+* Nix Versions: <https://status.nixos.org>
+* Nix Package Search: <https://search.nixos.org/packages>

@@ -24,7 +24,7 @@ fail() {
 generate_usage_string() {
   printf "Usage:\n"
   printf "  %s --update-nix-flake-lockfile         # update nix flake lockfile\n" "$SCRIPT_NAME"
-  printf "  %s --print-node-and-pnpm-paths-for-ide # Print the Node and pnpm paths to supply to your IDE\n" "$SCRIPT_NAME"
+  printf "  %s --print-node-and-tsdk-paths-for-ide # Print the Node and TypeScript SDK paths to supply to your IDE\n" "$SCRIPT_NAME"
   printf "  %s <idiomatic-build-args>              # run idiomatic build tasks inside the nix dev shell\n" "$SCRIPT_NAME"
 }
 
@@ -45,7 +45,7 @@ guard_single_arg_flags() {
   found_flag=""
   for arg in "$@"; do
     case "$arg" in
-      --update-nix-flake-lockfile|--print-node-and-pnpm-paths-for-ide)
+      --update-nix-flake-lockfile|--print-node-and-tsdk-paths-for-ide)
         if [ -n "$found_flag" ]; then
           fail "Error: $arg cannot be combined with other single-argument flags."
         fi
@@ -63,17 +63,14 @@ update_nix_flake_lockfile() {
   nix ${NIX_FLAGS} flake update "${SCRIPT_DIR}"
 }
 
-print_node_and_pnpm_paths_for_ide() {
+print_node_and_tsdk_paths_for_ide() {
   node_path="$(nix ${NIX_FLAGS} develop "${SCRIPT_DIR}" --command sh -c 'command -v node')"
   if [ -z "$node_path" ]; then
     fail "Node is not available inside the nix develop environment; ensure your flake exposes nodejs."
   fi
-  pnpm_path="$(nix ${NIX_FLAGS} develop "${SCRIPT_DIR}" --command sh -c 'command -v pnpm')"
-  if [ -z "$pnpm_path" ]; then
-    fail "pnpm is not available inside the nix develop environment; ensure your flake exposes pnpm."
-  fi
+  tsdk_path="${SCRIPT_DIR}/node_modules/typescript/lib"
   printf "Node binary path to supply to IDE: %s\n" "$node_path"
-  printf "pnpm binary path to supply to IDE: %s\n" "$pnpm_path"
+  printf "TypeScript SDK path to supply to IDE: %s\n" "$tsdk_path"
 }
 
 print_build_start_log() {
@@ -99,8 +96,8 @@ main() {
     --update-nix-flake-lockfile)
       update_nix_flake_lockfile
       ;;
-    --print-node-and-pnpm-paths-for-ide)
-      print_node_and_pnpm_paths_for_ide
+    --print-node-and-tsdk-paths-for-ide)
+      print_node_and_tsdk_paths_for_ide
       ;;
     *)
       print_build_start_log "$@"
