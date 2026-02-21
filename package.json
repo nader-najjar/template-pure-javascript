@@ -12,7 +12,7 @@
     "check": "pnpm run lint",
     "lint": "eslint",
     "test": "jest",
-    "containerImageBuild": "pnpm prune --prod && podman build -t $npm_package_name:latest . && podman save -o dist/container-image.tar $npm_package_name:latest && pnpm install --frozen-lockfile",
+    "containerImageBuild": "pnpm prune --prod && { podman build -q -t $npm_package_name:latest . && podman save -o dist/container-image.tar $npm_package_name:latest; RET=$?; pnpm install --frozen-lockfile; exit $RET; }",
     "printSuccess": "printf '\\033[0;32mBUILD SUCCEEDED\\033[0m\n'",
     "executeContainerImageSmokeTest": "pnpm run build && podman run --rm $npm_package_name:latest"
   },

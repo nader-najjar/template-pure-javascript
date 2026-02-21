@@ -1,0 +1,7 @@
+**
+!flake.nix
+!flake.lock
+!dist/application/
+!dist/application/**
+!node_modules/
+!node_modules/**

@@ -20,7 +20,7 @@ JavaScript best practices.
 
 &nbsp;
 
-## 3. Build Tasks
+## 3. Main Build Tasks
 
 ### `./universal-build build`
 
@@ -85,12 +85,12 @@ JavaScript best practices.
 ### IntelliJ IDEA Ultimate
 
 Follow the instructions here: <https://nader-najjar.notion.site/JetBrains-IDE-Setup-Usage-Guide-d9b0a2b78755822f9d03819f5f02feb2?source=copy_link>
-    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the java version specified in the flake
+    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the node/TypeScript version specified in the flake
 
 ### Visual Studio Code
 
 Follow the instructions here: <https://nader-najjar.notion.site/Visual-Studio-Code-Setup-Usage-Guide-f4e0a2b7875583be9293817d26459034?source=copy_link>
-    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the java version specified in the flake
+    * Use the command `./universal-build --print-node-and-tsdk-paths-for-ide` to get the local nix installation of the node/TypeScript version specified in the flake
 
 &nbsp;
 
