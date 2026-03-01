@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import type { Container } from 'inversify';
 import { createInversifyContainer } from './bootstrap/injection/Container';
 import { Executor } from './bootstrap/logic/Executor';
 import { LifecycleManager } from './LifecycleManager';
@@ -17,18 +18,22 @@ if (require.main === module) {
 }
 
 export function main(args: string[]): void {
-  try {
-    const container = createInversifyContainer();
-    const executor = container.get(Executor);
-    LifecycleManager.registerShutdownHooks(container);
+  LifecycleManager.registerShutdownHook();
+  let container: Container | undefined = undefined;
+  let exitCode = 0;
 
+  try {
+    container = createInversifyContainer();
+    const executor = container.get(Executor);
     executor.execute(args);
   } catch (error) {
-    safeCleanup(error);
-    process.exit(1);
+    logger.error({ error: error }, 'Technical exception occurred at software entrypoint level');
+    exitCode = 1;
+  } finally {
+    // Close any resources here before the process exits.
+    // Resources requiring cleanup should be declared before the try block so they are in scope.
+    LifecycleManager.signalDone();
   }
-}
 
-function safeCleanup(error: unknown): void {
-  logger.error({ error: error }, 'Technical exception occurred at software entrypoint level');
+  process.exit(exitCode);
 }
